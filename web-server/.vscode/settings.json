@@ -1,0 +1,11 @@
+{
+    "rust-analyzer.linkedProjects": [
+        ".\\webservice\\Cargo.toml",
+        ".\\webservice\\Cargo.toml",
+        ".\\webservice\\Cargo.toml",
+        ".\\webservice\\Cargo.toml",
+        ".\\webservice\\Cargo.toml",
+        ".\\webservice\\Cargo.toml"
+    ],
+    "cmake.configureOnOpen": false
+}
