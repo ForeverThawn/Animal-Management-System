@@ -31,8 +31,12 @@ mod state;
 #[path = "../models.rs"]
 mod models;
 
+#[path = "../parse.rs"]
+mod parse;
+
 use routers::*;
 use state::AppState;
+use models::LoginData;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -58,6 +62,10 @@ async fn main() -> io::Result<()> {
         error!("Environment config invalid: .env file not found");
     }
     debug!("This is a debug version!");
+
+    let server_ip = env::var("SERVER_IP").unwrap();
+    let server_port = env::var("SERVER_PORT").unwrap();
+    let server_addr = format!("{}:{}", server_ip, server_port);
     // 初始化 ---
 
     // --- 载入数据库
@@ -75,6 +83,10 @@ async fn main() -> io::Result<()> {
         visit_count: Mutex::new(0),
 
         db: db_pool,
+        login_data: Mutex::new(vec![LoginData {
+            username: "".to_string(),
+            password: "".to_string(),
+        }])
         // animals: Mutex::new(vec![]),
         // login_data: vec![],
     });
@@ -91,12 +103,13 @@ async fn main() -> io::Result<()> {
             .app_data(shared_data.clone())
             .configure(general_routes)
             .configure(animal_routes)
+            .configure(login_routes)
     };
 
-    info!("Server started at localhost:3000");
+    info!("Server started at {}", server_addr);
 
     HttpServer::new(app)
-    .bind("127.0.0.1:3000")?
+    .bind(server_addr)?
     .run()
     .await
 }

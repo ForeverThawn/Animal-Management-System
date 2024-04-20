@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/login.css">
+    <script>
+        function postData() {
+            // 创建XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+            var usernameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            
+            // 设置POST请求的URL
+            var url = "http://127.0.0.1:3000/login/request";
+            
+            // 准备要发送的数据，这里使用JSON格式
+            var data = JSON.stringify({username: usernameInput.value, password: passwordInput.value});
+            
+            // 配置请求
+            xhr.open("POST", url, true);
+            
+            // 设置请求头，如果需要的话
+            xhr.setRequestHeader("Content-Type", "application/json");
+            
+            // 监听请求状态变化
+            // xhr.onreadystatechange = function() {
+            //     if (xhr.readyState === 4 && xhr.status === 200) {
+            //     // 请求成功，处理返回的数据
+            //     console.log(xhr.responseText);
+            //     }
+            // };
+            
+            // 发送请求
+            xhr.send(data);
+        }
+    </script>
+
+</head>
+<body>
+    <div class="box">
+        <h2>登陆</h2>
+        <form class="login-form" action="http://127.0.0.1:3000/login/request" method="post">
+            <div class="login-box">
+                <label>账号</label>
+                <input type="text" id="username" name="username" placeholder="用户名"/>
+            </div>
+            <div class="login-box" >
+                <label>密码</label>
+                <input type="password" id="password" name="password" placeholder="密码"/>
+                <div class="toggle-password-box">
+                    <img src="images/showpassword.png" alt="toggle Password Visibility" onclick="togglePasswordVisibility()">
+                </div>
+            </div>
+            <script>
+                function togglePasswordVisibility() {
+                    var passwordInput = document.getElementById("password");
+                    if (passwordInput.type === "password") {
+                        passwordInput.type = "text";
+                    }
+                    else {
+                        passwordInput.type = "password";
+                    }
+                }
+            </script>
+            <div class="btn-box">
+                <a href="#">忘记密码?</a>
+                <div>
+                    <input type="submit" value="登陆">
+                    <input type="reset" value="取消">
+                    <!-- <button onclick="postData()">POST</button> -->
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

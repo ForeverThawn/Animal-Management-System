@@ -16,3 +16,12 @@ pub fn animal_routes(cfg: &mut web::ServiceConfig) {
 
     );
 }
+
+pub fn login_routes(cfg: &mut web::ServiceConfig) {
+    cfg
+    .service(web::scope("/login") // go 路由组
+    .route("/request", web::post().to(post_login_process))
+    .route("/get", web::get().to(get_login_data))
+
+    );
+}

@@ -73,3 +73,56 @@ pub async fn post_new_animal_db(
         time: row.time,
     }
 }
+
+
+// pub async fn get_shoot_by_id_db(
+//     pool: &PgPool,
+//     bamboo_id: i32,
+// // ) -> Result<Vec<Animal>, sqlx::Error> {
+// ) -> Vec<Bamboo> {
+//     let rows = sqlx::query!(
+//         // Bamboo,  // query_as!()
+//         r#"
+//         SELECT id, time, position_x, position_y, position_z
+//         FROM Bamboos 
+//         WHERE id = $1
+//         "#,
+//         bamboo_id
+//     )
+//     .fetch_all(pool)
+//     .await
+//     .unwrap();
+
+//     rows.iter()
+//         .map(|r| Bamboo {
+//             id: r.id,
+//             name: r.name.clone().unwrap(),  // 简单parse下
+//             time: r.time,
+//         })
+//         .collect() // 之后用result
+// }
+
+// pub async fn post_new_shoot_db(
+//     pool: &PgPool,
+//     new_bamboo: Bamboo // parsed json进来
+// ) -> Bamboo {
+//     let row = sqlx::query!(
+//         r#"
+//         INSERT INTO Bamboos (x, y, z)
+//         VALUES ($1, $2, $3)
+//         RETURNING id, time, x, y, z
+//         "#,
+//         new_bamboo.x,
+//         new_bamboo.y,
+//         new_bamboo.z,
+//     )
+//     .fetch_one(pool)
+//     .await
+//     .unwrap();
+
+//     Bamboo {
+//         id: row.id,
+//         name: row.name.clone().unwrap(),  // 简单parse下
+//         time: row.time,
+//     }
+// }

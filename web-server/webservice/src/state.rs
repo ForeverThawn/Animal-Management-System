@@ -10,4 +10,5 @@ pub struct AppState {
 
     // pub animals: Mutex<Vec<Animal>>,
     pub db: PgPool,
+    pub login_data: Mutex<Vec<LoginData>>,
 }

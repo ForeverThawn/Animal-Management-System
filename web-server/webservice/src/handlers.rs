@@ -35,6 +35,46 @@ use super::models::Animal;
 
 
 /** 
+ * http://.../login
+ * 
+ * 登陆请求
+ * 
+ * 传入: json 
+ * 
+ * 内存实现:   true
+ * 数据库实现: false
+ * 
+*/
+pub async fn post_login_process(
+    app_state: web::Data<AppState>,
+    new_login_request: web::Form<LoginData>,  //如果使用form提交
+    // new_login_request: web::Json<LoginData>,  //如果使用json提交
+) -> HttpResponse {
+    info!("Received login request");
+    let mut login_data = app_state.login_data.lock().unwrap();
+    login_data.push(LoginData {
+        username: new_login_request.clone().username, 
+        password: new_login_request.clone().password
+    });
+    HttpResponse::Ok().body(format!("Login success: {} {}", new_login_request.username, new_login_request.password)) // <- send response
+}
+
+
+pub async fn get_login_data(
+    app_state: web::Data<AppState>,
+) -> HttpResponse {
+    info!("Received login data list");
+    let mut string = String::new();
+    for data in app_state.login_data.lock().unwrap().iter() {
+        string.push_str(&format!("{:?}, ", data));
+        // info!("{:?}", data);
+    }
+    info!("{}", string);
+    HttpResponse::Ok().body(format!("{:?}", app_state.login_data.lock().unwrap().clone()))
+    
+}
+
+/** 
  * http://.../animals/{id}
  * 
  * 添加新动物 
@@ -202,6 +242,10 @@ mod tests {
             health_check_response: "".to_string(),
             visit_count: Mutex::new(0),
             db: db_pool,
+            login_data: Mutex::new(vec![LoginData {
+                username: "".to_string(),
+                password: "".to_string(),
+            }])
         });
         let resp = post_new_animal(app_state, animal).await;
         assert_eq!(resp.status(), StatusCode::OK);
@@ -221,6 +265,10 @@ mod tests {
             health_check_response: "".to_string(),
             visit_count: Mutex::new(0),
             db: db_pool,
+            login_data: Mutex::new(vec![LoginData {
+                username: "".to_string(),
+                password: "".to_string(),
+            }])
         });
         let resp = get_animals(app_state).await;
         assert_eq!(resp.status(), StatusCode::OK);
@@ -240,6 +288,10 @@ mod tests {
             health_check_response: "".to_string(),
             visit_count: Mutex::new(0),
             db: db_pool,
+            login_data: Mutex::new(vec![LoginData {
+                username: "".to_string(),
+                password: "".to_string(),
+            }])
         });
         let animal_id: web::Path<(i32,)> = web::Path::from((1,));
         let resp = get_animal_by_id(app_state, animal_id).await;
